@@ -8,13 +8,66 @@
     <link rel="stylesheet" href="./style/connect4.css">
 </head>
 <body>
-    <h1>Connect4</h1>
-    <h2 id="winner"></h2>
-    <h3 id="currentPlayer"></h3>
+    
+    
+    
+    <div id="startScreen" class="startScreen">
+        <h1>Connect4</h1>
 
-    <div id="columnEntry"></div>
-    <div id="board"></div>
+        <div>
+            <img src="https://cdn-icons-png.flaticon.com/512/5111/5111178.png" width="30px" />
+            <label>Yellow Player: </label>
+            <input id="iptYellowPlayer" type="text" placeholder="Your name" />
+
+            
+            <img src="https://cdn-icons-png.flaticon.com/512/594/594846.png" width="28px" />
+            <label>Blue Player: </label>
+            <input id="iptBluePlayer" type="text" placeholder="Your name" />
+
+            <button id="btnStart">Play!</button>
+        </div>
+    </div>
+
+   
+
+    <div id="gameScore" class="gameScore hide">
+        <h1>Connect4</h1>
+        
+        <p id="moveNumber"></p>
+    </div>
+   
+    <div id="winner"></div>
+
+    <div id="gameScreen" class="gameScreen hide">  
+
+       
+            
+            <div>
+                <div id="yellowBoardPieces">                   
+                </div>
+                <div id="yellowPlayer"></div>
+            </div>
+                
+            <div>
+                <div id="columnEntry"></div>
+                <div id="board" ></div>
+                <div id="boardFloor"></div>
+            </div>
+    
+            <div>
+                <div id="blueBoardPieces">               
+                </div>
+                <div id="bluePlayer"></div>
+            </div>
+           
+       
+        
+    </div>
+
+    
+    
 </body>
+
 
     <script src="./js/Connect4.js"></script>
     <script src="./js/index.js"></script>

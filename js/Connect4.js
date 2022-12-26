@@ -2,7 +2,12 @@ class Connect4 {
     constructor(){
         this.playerBlue = "B";
         this.playerYellow = "Y";
-        this.currPlayer = this.playerBlue;
+        this.currPlayer = this.playerYellow;
+
+        this.yellowPlayer = "";
+        this.bluePlayer = "";
+
+        this.moveNumber = 0;
 
         this.boardRows = 6;
         this.boardColumns = 7;
@@ -12,22 +17,37 @@ class Connect4 {
     }
 
     renderBoard(){
+        
+        //colunas de entrada das peças
         for (let c = 0; c < this.boardColumns; c++) {
             let entry = document.createElement("div");
             entry.id = "c" + c.toString();                
             entry.classList.add("entry");
+            // add drag and drop listeners
+            entry.addEventListener('dragover', this.dragOver);
+            entry.addEventListener('dragenter', this.dragEnter);
+            entry.addEventListener('dragleave', this.dragLeave);
+            entry.addEventListener('drop', this.dragDrop);
             
-            //TODO:
-            entry.addEventListener("click", ()=>this.setPiece(entry.id));
+            //mudança de click para drag and drop na coluna
+            //entry.addEventListener("click", ()=>this.setMove(entry.id));
             document.getElementById("columnEntry").append(entry);
             
             //TODO: mostra o numero da coluna
-            document.getElementById(entry.id).innerText = entry.id;
+            //document.getElementById(entry.id).innerText = entry.id;
         }
         
-        
+        // set first player piece
+        this.setPiece(this.currPlayer); 
+            
+
+
+        //montagem do tabuleiro        
+        //linhas
         for (let r = 0; r < this.boardRows; r++) {
             let row = [];
+            
+            //colunas
             for (let c = 0; c < this.boardColumns; c++) {
                 row.push(' ');
                 
@@ -35,45 +55,124 @@ class Connect4 {
                 tile.id = r.toString() + "-" + c.toString();                
                 tile.classList.add("tile");
                 
-                //TODO: mudar de click para drag and drop na coluna
-                //tile.addEventListener("click", setPiece);
+                //mudança de click para drag and drop na coluna
+                //tile.addEventListener("click", setMove);
                 document.getElementById("board").append(tile);
                 
                 //TODO: mostra o id de cada entrada
-                document.getElementById(tile.id).innerText = tile.id
+                //document.getElementById(tile.id).innerText = tile.id
             }
             //console.log(row)
             this.board.push(row);
         }
     }
 
-    setPiece(columnId){
+    setPiece(color){        
+        if (color === this.playerYellow){
+            let newYellowPiece = document.createElement("div");
+            newYellowPiece.id = "yellowPiece";     
+            newYellowPiece.draggable = true;           
+            newYellowPiece.classList.add("dragdrop-yellow");  
+            newYellowPiece.addEventListener('dragstart', this.dragStart);
+            newYellowPiece.addEventListener('dragend', this.dragEnd);
+            document.getElementById("yellowBoardPieces").append(newYellowPiece);
+        }
+        
+        if (color === this.playerBlue){
+            let newBluePiece = document.createElement("div");
+            newBluePiece.id = "bluePiece";     
+            newBluePiece.draggable = true;           
+            newBluePiece.classList.add("dragdrop-blue");  
+            newBluePiece.addEventListener('dragstart', this.dragStart);
+            newBluePiece.addEventListener('dragend', this.dragEnd);
+            document.getElementById("blueBoardPieces").append(newBluePiece);
+        }        
+    }
+    
+    dragStart(){
+        console.log(this.id)
+        this.className += ' hold';
+        
+        setTimeout(() => (this.className = 'invisible'), 0);
+    }
+
+    dragEnd() {                
+        if ((this.id === "yellowPiece") && (document.getElementById("yellowBoardPieces").childElementCount === 1)){
+            this.className = 'dragdrop-yellow';
+        }
+        if ((this.id === "bluePiece") && (document.getElementById("blueBoardPieces").childElementCount === 1)){
+            
+            this.className = 'dragdrop-blue';
+        }        
+    }
+
+    dragOver(e) {
+        e.preventDefault();
+    }
+
+    dragEnter(e) {
+        e.preventDefault();
+        this.className += ' hovered';
+    }
+
+    dragLeave() {
+        this.className = 'entry';    
+    }
+
+    dragDrop() {
+        this.className = 'entry';
+        //this.append(dragdropYellow);
+    
+        console.log(`Coluna jogada: ${this.id}`);
+        game.setMove(this.id);
+    }
+
+
+
+
+    
+    setMove(columnId){
         
         if (this.gameOver) {
             return;
         }
-        
-        let c = columnId[1];
 
+        // número da jogada
+        this.moveNumber+=1;
+        
+        let c = columnId[1]; // retirando do 'c' do nome da coluna (c3 -> 3)
         let rowCounter = 0
 
+        
         for (let r=6-1; r > -1 ; r--){
             
-            let tile = document.getElementById(r.toString() + "-" + c.toString());            
+            let tile = document.getElementById(r.toString() + "-" + c.toString());  
+                      
             
             if (tile.className === "tile"){
                 this.board[r][c] = this.currPlayer;
+                
+                // mostra o array do tabuleiro no console
                 console.log(this.board);
-                if (this.currPlayer === this.playerBlue) {
-                    tile.classList.add("blue-piece");
+                
+                // posiciona a peça jogada e altera o jogador
+                if (this.currPlayer === this.playerBlue) {                                   
+
+                    this.setDropingPieceEffect(r,c,"blue-piece");
+
+                    //tile.classList.add("blue-piece");
                     this.currPlayer = this.playerYellow;
                     this.setScore()
                 }
                 else {
-                    tile.classList.add("yellow-piece");
+                    
+                    this.setDropingPieceEffect(r,c,"yellow-piece");
+                    
+                    //tile.classList.add("yellow-piece");
                     this.currPlayer = this.playerBlue;
                     this.setScore()
                 }
+                
                 rowCounter++
                 
                 this.checkWinner();
@@ -92,7 +191,32 @@ class Connect4 {
 
     }
 
+    setDropingPieceEffect(r, c, color){
+        let count = 0
+        const velocity = 50
+
+        const nIntervId = setInterval(()=>{
+
+            for (let i=0; i<r; i++){
+                let dropingTile = document.getElementById(i.toString() + "-" + c.toString());
+                dropingTile.classList.remove(color)
+            }
+            document.getElementById(count.toString() + "-" + c.toString()).classList.add(color)
+            count+=1;            
+            if (count === (r+1)){
+                clearInterval(nIntervId)
+            }            
+        },velocity);   
+        
+    }
+
     checkWinner() {
+        
+        if (this.moveNumber === (this.boardRows * this.boardColumns)){
+            console.log("JOGO EMPATOU");
+            this.gameOver = true;
+        }
+        
         // horizontal
         for (let r = 0; r < this.boardRows; r++) {
             for (let c = 0; c < this.boardColumns - 3; c++){
@@ -143,19 +267,61 @@ class Connect4 {
    }
    
     setWinner(r, c) {
-       let winner = document.getElementById("winner");
-       if (this.board[r][c] == this.playerBlue) {
-           winner.innerText = "Blue Wins";             
-       } else {
-           winner.innerText = "Yellow Wins";
-       }
        
-       //TODO: game over
-       this.gameOver = true;
+        document.getElementById("yellowBoardPieces").classList.add("hide");
+        document.getElementById("blueBoardPieces").classList.add("hide");
+        document.getElementById("yellowPlayer").classList.add("hide");
+        document.getElementById("bluePlayer").classList.add("hide");
+       
+        let winner = document.getElementById("winner");
+        if (this.board[r][c] == this.playerBlue) {
+            winner.innerText = "Blue Wins! " + this.bluePlayer;             
+        } else {
+            winner.innerText = "Yellow Wins! " + this.yellowPlayer;
+        }
+        
+        //TODO: game over
+        this.gameOver = true;
     }
 
+    
     setScore(){
-        document.getElementById("currentPlayer").innerText = this.currPlayer;
+        // número de jogadas
+        document.getElementById("moveNumber").innerText = 'Move: ' + this.moveNumber;
+        
+        
+        
+        if (this.currPlayer === this.playerBlue){
+            document.getElementById("blueBoardPieces").classList.add("turn")
+            document.getElementById("yellowBoardPieces").classList.remove("turn")   
+            this.setPiece(this.playerYellow);
+            
+            document.getElementById("yellowBoardPieces").lastChild.draggable = false
+            document.getElementById("blueBoardPieces").lastChild.draggable = true
+            
+            
+            document.getElementById("yellowBoardPieces").lastChild.style.cursor = "no-drop"
+            document.getElementById("blueBoardPieces").lastChild.style.cursor = "pointer"
+                  
+        }
+
+        if (this.currPlayer === this.playerYellow){
+            document.getElementById("yellowBoardPieces").classList.add("turn")
+            document.getElementById("blueBoardPieces").classList.remove("turn")
+            this.setPiece(this.playerBlue); 
+
+            document.getElementById("blueBoardPieces").lastChild.draggable = false
+            document.getElementById("yellowBoardPieces").lastChild.draggable = true
+
+            document.getElementById("blueBoardPieces").lastChild.style.cursor = "no-drop"
+            document.getElementById("yellowBoardPieces").lastChild.style.cursor = "pointer"
+
+        }
+
+        
+
     }
+
+
 
 }
