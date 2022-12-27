@@ -1,4 +1,5 @@
 class Connect4 {
+    
     constructor(){
         this.playerBlue = "B";
         this.playerYellow = "Y";
@@ -40,7 +41,6 @@ class Connect4 {
         // set first player piece
         this.setPiece(this.currPlayer); 
             
-
 
         //montagem do tabuleiro        
         //linhas
@@ -121,8 +121,7 @@ class Connect4 {
 
     dragDrop() {
         this.className = 'entry';
-        //this.append(dragdropYellow);
-    
+            
         console.log(`Coluna jogada: ${this.id}`);
         game.setMove(this.id);
     }
@@ -137,13 +136,13 @@ class Connect4 {
             return;
         }
 
-        // número da jogada
+        let audio = new Audio('../assets/piecedrop.wav');
+        audio.play();
+
         this.moveNumber+=1;
         
         let c = columnId[1]; // retirando do 'c' do nome da coluna (c3 -> 3)
-        let rowCounter = 0
-
-        
+              
         for (let r=6-1; r > -1 ; r--){
             
             let tile = document.getElementById(r.toString() + "-" + c.toString());  
@@ -173,20 +172,28 @@ class Connect4 {
                     this.setScore()
                 }
                 
-                rowCounter++
                 
+                // verifica se a coluna está cheia
+                if (r === 0){
+                    console.log(`A coluna ${c} já está cheia!`);
+                    const columnEntry = document.getElementById("c"+c.toString());                 
+
+                    const fullEntry = document.createElement("div");
+                    fullEntry.id = "c" + c.toString();   
+                    fullEntry.className = "full";
+                    fullEntry.style.cursor = "no-drop"                
+                    
+
+                    const parentDiv = columnEntry.parentNode;                  
+                    parentDiv.replaceChild(fullEntry, columnEntry);
+                    
+                }
+
                 this.checkWinner();
                 return;
             };  
                 
        };
-    
-       //TODO: coluna cheia
-       if (rowCounter === 0){
-        console.log(`A coluna ${c} já está cheia. Não realizar a jogada.`);
-        return;
-       };
-       
        
 
     }
@@ -213,8 +220,8 @@ class Connect4 {
     checkWinner() {
         
         if (this.moveNumber === (this.boardRows * this.boardColumns)){
-            console.log("JOGO EMPATOU");
-            this.gameOver = true;
+            //console.log("JOGO EMPATOU");
+            this.setWinner(0, 0);            
         }
         
         // horizontal
@@ -268,6 +275,10 @@ class Connect4 {
    
     setWinner(r, c) {
        
+        //play sound
+        let audio = new Audio('../assets/gamewin.wav');
+        audio.play();
+        
         document.getElementById("yellowBoardPieces").classList.add("hide");
         document.getElementById("blueBoardPieces").classList.add("hide");
         document.getElementById("yellowPlayer").classList.add("hide");
@@ -275,11 +286,15 @@ class Connect4 {
        
         let winner = document.getElementById("winner");
         if (this.board[r][c] == this.playerBlue) {
-            winner.innerText = "Blue Wins! " + this.bluePlayer;             
+            winner.innerText = this.bluePlayer + " | Blue Wins! ";             
         } else {
-            winner.innerText = "Yellow Wins! " + this.yellowPlayer;
+            winner.innerText = this.yellowPlayer + " | Yellow Wins! ";
         }
-        
+
+        if ((r === 0) && (c === 0)){
+            winner.innerText = "The game tied!";
+        }
+         
         //TODO: game over
         this.gameOver = true;
     }
@@ -290,7 +305,7 @@ class Connect4 {
         document.getElementById("moveNumber").innerText = 'Moves: ' + this.moveNumber;
         
         
-        
+        // mudança de jogador
         if (this.currPlayer === this.playerBlue){
             document.getElementById("blueBoardPieces").classList.add("turn")
             document.getElementById("yellowBoardPieces").classList.remove("turn")

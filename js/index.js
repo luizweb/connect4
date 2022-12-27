@@ -5,34 +5,44 @@ const yellowPlayer = document.getElementById("yellowPlayer")
 const bluePlayer = document.getElementById("bluePlayer")
 const iptYellowPlayer = document.getElementById("iptYellowPlayer")
 const iptBluePlayer = document.getElementById("iptBluePlayer")
+const btnStart = document.getElementById("btnStart")
 const btnPlayAgain = document.getElementById("btnPlayAgain")
 const btnExit = document.getElementById("btnExit")
 
+
 const game = new Connect4();
 
-
-// adicionar o event listener no botão 'START'
-btnStart.addEventListener("click", ()=>{
+btnStart.addEventListener("click", ()=>{   
     
+    let audio = new Audio('../assets/newgame.wav');
+    audio.play();
+
     
-
-    // start scren desapareça
-    startScreen.classList.add("hide"); // adiciona uma classe para uma tag
-
-    // mostrar o gamescore
-    //gameScreen.className = "show"; // define o nome da classe para ua tag
+    startScreen.classList.add("hide"); 
     gameScore.classList.remove("hide")
     gameScreen.classList.remove("hide")
     btnPlayAgain.classList.remove("hide")
     btnExit.classList.remove("hide")
 
 
-    // pegando os dados dos campos html e colocando na classe e no html
-    game.yellowPlayer = iptYellowPlayer.value;
-    yellowPlayer.innerText = game.yellowPlayer;
+   
+    if (iptYellowPlayer.value.length !== 0){
+        game.yellowPlayer = iptYellowPlayer.value;
+        yellowPlayer.innerText = game.yellowPlayer;
+    }else {
+        game.yellowPlayer = "yellow player";
+        yellowPlayer.innerText = game.yellowPlayer;
+    }
+
+    if (iptBluePlayer.value.length !== 0){
+        game.bluePlayer = iptBluePlayer.value;
+        bluePlayer.innerText = game.bluePlayer;
+    }else {
+        game.bluePlayer = "blue player";
+        bluePlayer.innerText = game.bluePlayer;
+    }
     
-    game.bluePlayer = iptBluePlayer.value;
-    bluePlayer.innerText = game.bluePlayer;
+    
 
     game.renderBoard();
     game.setScore();
@@ -40,6 +50,10 @@ btnStart.addEventListener("click", ()=>{
 
 
 btnPlayAgain.addEventListener("click", ()=>{
+
+    let audio = new Audio('../assets/newgame.wav');
+    audio.play();
+
     document.getElementById("board").innerHTML = '';
     document.getElementById("columnEntry").innerHTML = '';
     document.getElementById("yellowBoardPieces").innerHTML = '';
@@ -57,4 +71,4 @@ btnPlayAgain.addEventListener("click", ()=>{
     game.gameOver = false;    
     game.renderBoard();
     game.setScore();
-})
+});
