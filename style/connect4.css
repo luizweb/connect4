@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Lato', sans-serif;
     text-align: center;
     background-color: wheat;
 }
@@ -10,8 +12,12 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: wheat;    
-    height: 90vh;
+    border-radius: 10px;
+    background: rgb(243, 232, 213);    
+    height: 50%;
+    width: 630px ;
+    margin: 50px auto;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
 .startScreen > h1{
@@ -20,37 +26,44 @@ body {
 }
 
 .startScreen > div {
-    font-size: 1.2rem;
-    gap:15px;
-    display: flex;
     
-    align-items: center;
-
-    border-radius: 10px;
-    background: rgb(243, 232, 213);
     
-    padding: 35px;
+    display: flex;    
+    align-items: center;   
+    padding: 20px;
 }
 
+form  { display: flex;      }
+p     { display: table-row; }
+label { display: flex; align-items: center; padding: 5px; margin:0 10px}
+input { display: table-cell;  }
+
 #iptYellowPlayer, #iptBluePlayer {
-    font-size: 1.2rem;
-    width: 30vh;
+    
+    margin:0 10px;
+    width: 29vh;
     height: 30px;
 }
 
+
 #btnStart{
-    padding: 10px;
+    padding: 10px 20px;
     font-size: 1.2rem;
     border-radius: 5px;
     border: 0;
     background-color:#ef233c;
     color: #ffffff;
+    margin: 10px;
 }
 
 #btnStart:hover{
     cursor: pointer;
 }
 
+li{
+    padding: 10px;
+    text-align: left;
+}
 
 
 
@@ -62,11 +75,13 @@ body {
     width: 630px;
     margin: 0 auto;
     
-    margin-bottom: 30px;  
+    margin-bottom: 30px; 
+    border-bottom: 1px solid gray; 
     
 }
 
 #winner {
+    font-size: x-large;
     font-weight: bolder;
     width: 630px;
     margin: 0 auto;
@@ -74,7 +89,16 @@ body {
     
 }
 
-
+.btnPlayAgain, .btnExit{
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border: 0;
+    background-color:#ef233c;
+    color: #ffffff;
+    margin-top: 20px;
+    cursor: pointer;
+}
 
 
 
@@ -129,13 +153,23 @@ body {
     width: 80px;
     height: 80px;
     margin-bottom: 15px;
+    
+    
 }
 
+#yellowPlayer, #bluePlayer {
+    font-weight: bold;
+    background-color: beige;
+    padding: 3px;
+    border-radius: 3px;
+}
 
 .turn{
     background-color: rgb(243, 232, 213);    
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-
+    
+    outline: solid 2px green;
+    outline-offset: -2px;
 }
 
 

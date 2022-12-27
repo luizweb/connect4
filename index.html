@@ -12,25 +12,42 @@
     
     
     <div id="startScreen" class="startScreen">
-        <h1>Connect4</h1>
-
         <div>
-            <img src="https://cdn-icons-png.flaticon.com/512/5111/5111178.png" width="30px" />
-            <label>Yellow Player: </label>
-            <input id="iptYellowPlayer" type="text" placeholder="Your name" />
-
-            
-            <img src="https://cdn-icons-png.flaticon.com/512/594/594846.png" width="28px" />
-            <label>Blue Player: </label>
-            <input id="iptBluePlayer" type="text" placeholder="Your name" />
-
-            <button id="btnStart">Play!</button>
+            <img src="https://cdn-icons-png.flaticon.com/512/3367/3367465.png" width="70px" style="padding: 10px;"/>
+            <h1>Connect4</h1>
         </div>
+        
+        <div>
+            <img src="./assets/draganddrop.png" width="350px"/>
+            <ol>
+                <li>Players must connect 4 of the same colored discs in a row to win</li>
+                <li>Only one piece is played at a time</li>
+                <li>The game ends when there is a 4-in-a-row or a stalemate</li>
+            </ol>
+        </div>
+        <br>
+        <form>    
+            
+            <p>
+                
+                <label><img src="https://cdn-icons-png.flaticon.com/512/1281/1281188.png" width="25px" style="padding-right: 2%;" /> Yellow Player: </label>
+                <input id="iptYellowPlayer" type="text" placeholder="player name" />
+            </p>
+    
+            <p>
+                <label><img src="https://cdn-icons-png.flaticon.com/512/1281/1281225.png" width="25px" style="padding-right: 2%;" /> Blue Player: </label>
+                <input id="iptBluePlayer" type="text" placeholder="player name" />
+            </p>
+        </form>
+            
+        <p><button id="btnStart">Play!</button></p>
+        
     </div>
 
    
 
     <div id="gameScore" class="gameScore hide">
+        <img src="https://cdn-icons-png.flaticon.com/512/3367/3367465.png" width="60px" style="padding: 10px;"/>
         <h1>Connect4</h1>
         
         <p id="moveNumber"></p>
@@ -63,7 +80,10 @@
        
         
     </div>
-
+    <div>
+        <button id="btnPlayAgain" class="btnPlayAgain hide">Restart Game</button>
+        <button id="btnExit" onClick="location.reload()" class="btnExit hide">Exit</button>
+    </div>
     
     
 </body>

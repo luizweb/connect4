@@ -287,13 +287,14 @@ class Connect4 {
     
     setScore(){
         // número de jogadas
-        document.getElementById("moveNumber").innerText = 'Move: ' + this.moveNumber;
+        document.getElementById("moveNumber").innerText = 'Moves: ' + this.moveNumber;
         
         
         
         if (this.currPlayer === this.playerBlue){
             document.getElementById("blueBoardPieces").classList.add("turn")
-            document.getElementById("yellowBoardPieces").classList.remove("turn")   
+            document.getElementById("yellowBoardPieces").classList.remove("turn")
+                        
             this.setPiece(this.playerYellow);
             
             document.getElementById("yellowBoardPieces").lastChild.draggable = false
@@ -308,6 +309,7 @@ class Connect4 {
         if (this.currPlayer === this.playerYellow){
             document.getElementById("yellowBoardPieces").classList.add("turn")
             document.getElementById("blueBoardPieces").classList.remove("turn")
+           
             this.setPiece(this.playerBlue); 
 
             document.getElementById("blueBoardPieces").lastChild.draggable = false
